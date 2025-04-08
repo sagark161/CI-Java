@@ -1,6 +1,8 @@
 name: Run Only New Tests on PR
 
 on:
+  push:
+    branches: [ main ]
   pull_request:
     branches: [ main ]
 
