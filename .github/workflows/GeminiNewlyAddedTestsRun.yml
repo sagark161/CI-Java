@@ -1,0 +1,62 @@
+name: Run Changed Java Tests
+
+on:
+  push:
+    branches:
+      - main # or your branch
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 2
+
+      - name: Set up JDK 22
+        uses: actions/setup-java@v3
+        with:
+          java-version: '22'
+          distribution: 'temurin'
+
+      - name: Get changed files
+        id: changed-files
+        run: |
+          CHANGED_FILES=$(git diff --name-only ${{ github.event.before }} ${{ github.event.after }})
+          echo "CHANGED_FILES=$CHANGED_FILES" >> $GITHUB_OUTPUT
+
+      - name: Filter relevant tests
+        id: filtered-tests
+        run: |
+          CHANGED_FILES="${{ steps.changed-files.outputs.CHANGED_FILES }}"
+          if [[ -z "$CHANGED_FILES" ]]; then
+            echo "No changed files, running all tests"
+            echo "RUN_ALL=true" >> $GITHUB_OUTPUT
+          else
+            TEST_CLASSES=""
+            for file in $CHANGED_FILES; do
+              if [[ "$file" == *.java ]]; then
+                test_class=$(echo "$file" | sed 's/\.java$/Test.java/' | sed 's/\//./g') #adjust naming convention, and path to package syntax.
+                if [[ -f "src/test/java/${test_class}" ]]; then #assuming src/test/java structure
+                  TEST_CLASSES="$TEST_CLASSES $test_class"
+                fi
+              fi
+            done
+            if [[ -z "$TEST_CLASSES" ]]; then
+                echo "No relevant tests found, running all tests"
+                echo "RUN_ALL=true" >> $GITHUB_OUTPUT
+            else
+              echo "TEST_CLASSES=$TEST_CLASSES" >> $GITHUB_OUTPUT
+              echo "RUN_ALL=false" >> $GITHUB_OUTPUT
+            fi
+          fi
+
+      - name: Run tests
+        run: |
+          if ${{ steps.filtered-tests.outputs.RUN_ALL == 'true' }}; then
+            mvn test #Run all tests
+          else
+            mvn test -Dtest=${{ steps.filtered-tests.outputs.TEST_CLASSES }} #Run filtered tests
+          fi
