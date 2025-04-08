@@ -1,0 +1,43 @@
+name: Run Only New Tests on PR
+
+on:
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  selective-test:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout PR code
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0  # Needed to fetch full history for diff
+
+      - name: Set up JDK 22
+        uses: actions/setup-java@v3
+        with:
+          java-version: '22'
+          distribution: 'temurin'
+
+      - name: Identify newly added test files
+        id: new_tests
+        run: |
+          echo "Getting list of newly added test files..."
+          NEW_TESTS=$(git diff --name-status origin/main...HEAD | grep '^A' | awk '{print $2}' | grep 'src/test' || true)
+          
+          echo "Found:"
+          echo "$NEW_TESTS"
+          
+          TEST_CLASSES=$(echo "$NEW_TESTS" | grep '\.java$' | sed 's|.*/||' | sed 's/\.java//' | paste -sd, -)
+          
+          echo "TEST_CLASSES=$TEST_CLASSES" >> $GITHUB_ENV
+
+      - name: Run only newly added tests (if any)
+        run: |
+          if [ -n "$TEST_CLASSES" ]; then
+            echo "Running tests: $TEST_CLASSES"
+            mvn -B test -Dtest="$TEST_CLASSES"
+          else
+            echo "No new test classes to run."
+          fi
