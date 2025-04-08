@@ -25,13 +25,13 @@ jobs:
       - name: Identify newly added test files
         id: new_tests
         run: |
-          echo "Getting list of newly added test files..."
-          NEW_TESTS=$(git diff --name-status origin/main...HEAD | grep '^A' | awk '{print $2}' | grep 'src/test' || true)
+          echo "Identifying modified test files..."
+          MODIFIED_TESTS=$(git diff --name-only HEAD~1 HEAD | grep 'src/test' || true)
           
-          echo "Found:"
-          echo "$NEW_TESTS"
+          echo "Modified test files:"
+          echo "$MODIFIED_TESTS"
           
-          TEST_CLASSES=$(echo "$NEW_TESTS" | grep '\.java$' | sed 's|.*/||' | sed 's/\.java//' | paste -sd, -)
+          TEST_CLASSES=$(echo "$MODIFIED_TESTS" | grep '\.java$' | sed 's|.*/||' | sed 's/\.java//' | paste -sd, -)
           
           echo "TEST_CLASSES=$TEST_CLASSES" >> $GITHUB_ENV
 
