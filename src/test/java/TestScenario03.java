@@ -5,7 +5,7 @@ public class TestScenario03 {
 
     @Test
     void test03() {
-        Assert.assertEquals(1 + 12, 13, "Test05 to pass");
+        Assert.assertEquals(1 + 10, 10, "Test05 to pass");
     }
 
     @Test
