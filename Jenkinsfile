@@ -1,6 +1,6 @@
 pipeline {
     agent {
-        label 'ubuntu' // Ensure the agent has the required environment
+        label 'windows_agent' // Ensure the agent has the required environment
     }
     environment {
         JAVA_HOME = tool name: 'JDK 22', type: 'jdk' // Configure JDK 22
