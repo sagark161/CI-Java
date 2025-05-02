@@ -7,6 +7,11 @@ pipeline {
         PATH = "${JAVA_HOME}/bin:${env.PATH}"
     }
     stages {
+        agent any
+        tools {
+            maven 'maven'
+            jdk 'jdk22'
+        }
         stage('Checkout') {
             steps {
                 checkout scm
