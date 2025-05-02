@@ -20,7 +20,7 @@ jobs:
       - name: Setup Jenkins
         uses: jenkinsci/jfr-setup-action@master
         with:
-          version: '2.414.3'
+          jenkins-version: '2.414.3'
       - name: Jenkins plugins download
         id: jenkins_plugins_download
         uses: jenkinsci/jfr-plugin-installation-action@master
