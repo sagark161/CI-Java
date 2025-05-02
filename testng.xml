@@ -5,9 +5,8 @@
     </listeners>
     <test name="TestScenario01">
         <classes>
-            <class name="Scenario01" />
-            <class name="Scenario02" />
-            <class name="TestScenario03" />
+            <class name="TestScenario01" />
+            <class name="TestScenario02" />
         </classes>
     </test>
 </suite>

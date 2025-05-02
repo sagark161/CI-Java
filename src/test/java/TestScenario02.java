@@ -1,7 +1,7 @@
 import org.testng.Assert;
 import org.testng.annotations.Test;
 
-public class Scenario02 {
+public class TestScenario02 {
 
     @Test
     void test03() {
