@@ -8,7 +8,6 @@ pipeline {
     }
     tools {
         maven 'Maven3.9' // Use the correct Maven name
-        jdk 'JDK22' // Use the correct JDK name
     }
     stages {
         stage('Checkout') {
