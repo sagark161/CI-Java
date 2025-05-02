@@ -3,7 +3,7 @@ pipeline {
         label 'local_mac' // Ensure the agent has the required environment
     }
     environment {
-        JAVA_HOME = tool name: 'OpenJDK11', type: 'jdk' // Use the correct JDK name
+        JAVA_HOME = tool name: 'openjdk11', type: 'jdk' // Use the correct JDK name
         PATH = "${JAVA_HOME}/bin:${env.PATH}"
     }
     tools {
