@@ -15,9 +15,9 @@ jobs:
   jenkins-static-image-pipeline:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
-      - uses:
-          jenkinsci/jfr-static-image-action@master
+      - uses: actions/checkout@v4
+      - name: Run Jenkins Pipeline
+        uses: jenkinsci/jfr-static-image-action@master
         with:
           command: run
           jenkinsfile: Jenkinsfile
