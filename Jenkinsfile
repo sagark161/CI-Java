@@ -3,12 +3,12 @@ pipeline {
         label 'windows_agent' // Ensure the agent has the required environment
     }
     environment {
-        JAVA_HOME = tool name: 'JDK 22', type: 'jdk' // Configure JDK 22
+        JAVA_HOME = tool name: 'JDK22', type: 'jdk' // Use the correct JDK name
         PATH = "${JAVA_HOME}/bin:${env.PATH}"
     }
     tools {
-        maven 'maven'
-        jdk 'jdk22'
+        maven 'Maven3.9' // Use the correct Maven name
+        jdk 'JDK22' // Use the correct JDK name
     }
     stages {
         stage('Checkout') {
