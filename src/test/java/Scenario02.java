@@ -10,6 +10,6 @@ public class Scenario02 {
 
     @Test
     void test04() {
-        Assert.assertEquals(1 + 1, 5, "Test04 to fail");
+        Assert.assertEquals(1 + 1, 2, "Test04 to PASS");
     }
 }
