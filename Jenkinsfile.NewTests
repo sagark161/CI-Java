@@ -1,0 +1,66 @@
+pipeline {
+    agent {
+        label 'ubuntu' // Ensure the agent runs on an Ubuntu node
+    }
+    environment {
+        JAVA_HOME = tool name: 'openjdk22', type: 'jdk' // Set up JDK 22
+        PATH = "${JAVA_HOME}/bin:${env.PATH}"
+    }
+    tools {
+        maven 'Maven3.9' // Ensure Maven is available
+    }
+    stages {
+        stage('Checkout PR Code') {
+            steps {
+                checkout scm
+                sh 'git fetch --unshallow || true' // Ensure full history is fetched
+            }
+        }
+        stage('Identify Newly Added Test Files') {
+            steps {
+                script {
+                    echo "Identifying modified test files..."
+                    def modifiedTests = sh(
+                        script: "git diff --name-only HEAD~1 HEAD | grep 'src/test' || true",
+                        returnStdout: true
+                    ).trim()
+
+                    echo "Modified test files:\n${modifiedTests}"
+
+                    def testClasses = modifiedTests
+                        .split('\n')
+                        .findAll { it.endsWith('.java') }
+                        .collect { it.replaceAll('.*/', '').replace('.java', '') }
+                        .join(',')
+
+                    if (testClasses) {
+                        env.TEST_CLASSES = testClasses
+                        echo "Test classes to run: ${env.TEST_CLASSES}"
+                    } else {
+                        echo "No new test classes to run."
+                        env.TEST_CLASSES = ''
+                    }
+                }
+            }
+        }
+        stage('Run Only Newly Added Tests') {
+            when {
+                expression { env.TEST_CLASSES != '' }
+            }
+            steps {
+                sh "mvn -B test -Dtest=${env.TEST_CLASSES}"
+            }
+        }
+    }
+    post {
+        always {
+            echo 'Pipeline execution completed.'
+        }
+        success {
+            echo 'Tests executed successfully.'
+        }
+        failure {
+            echo 'Pipeline failed.'
+        }
+    }
+}
