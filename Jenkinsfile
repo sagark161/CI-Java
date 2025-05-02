@@ -6,12 +6,11 @@ pipeline {
         JAVA_HOME = tool name: 'JDK 22', type: 'jdk' // Configure JDK 22
         PATH = "${JAVA_HOME}/bin:${env.PATH}"
     }
+    tools {
+        maven 'maven'
+        jdk 'jdk22'
+    }
     stages {
-        agent any
-        tools {
-            maven 'maven'
-            jdk 'jdk22'
-        }
         stage('Checkout') {
             steps {
                 checkout scm
