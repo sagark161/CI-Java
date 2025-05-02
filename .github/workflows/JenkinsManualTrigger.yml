@@ -18,9 +18,8 @@ jobs:
       - uses: actions/checkout@v4
       - name: Download Jenkins WAR
         run: |
-          mkdir -p /app/jenkins
-          curl -L -o /app/jenkins/jenkins.war https://get.jenkins.io/war-stable/latest/jenkins.war
-
+          mkdir -p ${{ runner.temp }}/jenkins
+          curl -L -o ${{ runner.temp }}/jenkins/jenkins.war https://get.jenkins.io/war-stable/latest/jenkins.war
       - name: Run Jenkins Pipeline
         uses: jenkinsci/jfr-static-image-action@master
         with:
