@@ -1,6 +1,6 @@
 pipeline {
     agent {
-        label 'windows_agent' // Ensure the agent has the required environment
+        label 'local_mac' // Ensure the agent has the required environment
     }
     environment {
         JAVA_HOME = tool name: 'JDK22', type: 'jdk' // Use the correct JDK name
