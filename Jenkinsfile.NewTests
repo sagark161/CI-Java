@@ -1,19 +1,19 @@
 pipeline {
     agent {
-        label 'ubuntu' // Ensure the agent runs on an Ubuntu node
+        label 'local_mac'
     }
     environment {
-        JAVA_HOME = tool name: 'openjdk22', type: 'jdk' // Set up JDK 22
+        JAVA_HOME = tool name: 'openjdk11', type: 'jdk'
         PATH = "${JAVA_HOME}/bin:${env.PATH}"
     }
     tools {
-        maven 'Maven3.9' // Ensure Maven is available
+        maven 'Maven3.9'
     }
     stages {
         stage('Checkout PR Code') {
             steps {
                 checkout scm
-                sh 'git fetch --unshallow || true' // Ensure full history is fetched
+                sh 'git fetch --unshallow || true'
             }
         }
         stage('Identify Newly Added Test Files') {
