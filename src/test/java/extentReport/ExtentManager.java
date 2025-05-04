@@ -3,30 +3,34 @@ package extentReport;
 import com.aventstack.extentreports.ExtentReports;
 import com.aventstack.extentreports.reporter.ExtentSparkReporter;
 import com.aventstack.extentreports.reporter.configuration.Theme;
-import java.io.FileInputStream;
-import java.io.IOException;
+import utils.FileReaderUtility;
+
 import java.util.Properties;
 
 public class ExtentManager {
     private static final ExtentReports extent = new ExtentReports();
-    private static final ExtentSparkReporter sparkReporter = new ExtentSparkReporter("src/test/reports/ExtentReport.html");
+    private static final ExtentSparkReporter sparkReporter;
 
     static {
+        // Load extent-report-config.properties using FileReaderUtility
+        Properties config = FileReaderUtility.readPropertiesFile("src/test/resources/extent-report-config.properties");
+
+        // Load paths.properties using FileReaderUtility
+        String reportLocation = config.getProperty("report.location", "src/test/reports/");
+        String reportFileName = "TestReport_" + System.currentTimeMillis() + ".html";
+        String reportFilePath = reportLocation + reportFileName;
+
+        // Initialize ExtentSparkReporter
+        sparkReporter = new ExtentSparkReporter(reportFilePath);
         sparkReporter.config().setTheme(Theme.STANDARD);
 
-        Properties config = new Properties();
-        try (FileInputStream fis = new FileInputStream("src/test/resources/config.properties")) {
-            config.load(fis);
-        } catch (IOException e) {
-            e.printStackTrace();
-            throw new RuntimeException("Failed to load config.properties");
-        }
+        // Load extent-report-config.properties using FileReaderUtility
+        sparkReporter.config().setDocumentTitle(config.getProperty("report.title", "Test Report"));
+        sparkReporter.config().setReportName(config.getProperty("report.name", "Automation Report"));
 
-        sparkReporter.config().setDocumentTitle(config.getProperty("report.title"));
-        sparkReporter.config().setReportName(config.getProperty("report.name"));
-
-        extent.setSystemInfo("Environment", config.getProperty("environment"));
-        extent.setSystemInfo("Tester", config.getProperty("tester"));
+        // Set system info
+        extent.setSystemInfo("Environment", config.getProperty("environment", "QA"));
+        extent.setSystemInfo("Tester", config.getProperty("tester", "Unknown"));
         extent.attachReporter(sparkReporter);
     }
 
@@ -34,4 +38,3 @@ public class ExtentManager {
         return extent;
     }
 }
-
