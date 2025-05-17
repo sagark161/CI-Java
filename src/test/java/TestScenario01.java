@@ -5,10 +5,10 @@ public class TestScenario01 {
 
     @Test
     void test01() {
-        Assert.assertEquals(1 + 1, 3, "Test01 to pass");
+        Assert.assertEquals(1 + 1, 2, "Test01 to pass");
     }
 
-    @Test(enabled = false)
+    @Test
     void test02() {
         Assert.assertEquals(1 + 1, 2, "Test01 to Pass");
     }
