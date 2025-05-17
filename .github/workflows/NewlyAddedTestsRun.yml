@@ -1,4 +1,4 @@
-name: Run Only New Tests on PR
+name: Test Suite - Auto Trigger - Run only New Tests on PR
 
 on:
   push:

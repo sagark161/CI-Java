@@ -6,7 +6,7 @@
 # separate terms of service, privacy policy, and support
 # documentation.
 
-name: Java CI with Maven
+name: Test Suite - Manual Trigger - Run all tests
 
 on:
   workflow_dispatch:
