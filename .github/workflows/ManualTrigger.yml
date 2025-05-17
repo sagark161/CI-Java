@@ -40,6 +40,8 @@ jobs:
         total=$(grep -ho 'Tests run: [0-9]*' target/surefire-reports/*.txt | awk '{s+=$3} END {print s}')
         failed=$(grep -ho 'Failures: [0-9]*' target/surefire-reports/*.txt | awk '{s+=$2} END {print s}')
         skipped=$(grep -ho 'Skipped: [0-9]*' target/surefire-reports/*.txt | awk '{s+=$2} END {print s}')
+        passed=$((total - failed - skipped))
         echo "- Total Tests: $total" >> $GITHUB_STEP_SUMMARY
+        echo "- Passed: $passed" >> $GITHUB_STEP_SUMMARY
         echo "- Failures: $failed" >> $GITHUB_STEP_SUMMARY
         echo "- Skipped: $skipped" >> $GITHUB_STEP_SUMMARY
