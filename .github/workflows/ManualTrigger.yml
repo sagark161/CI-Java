@@ -34,12 +34,12 @@ jobs:
         name: test-reports
         path: src/test/reports
 
-    - name: Add test results to job summary
-      if: always()
+    - name: Parse test results and add to summary
       run: |
-        if [ -f src/test/reports/TestReport_*.html ]; then
-          echo "### Test Report" >> $GITHUB_STEP_SUMMARY
-          echo "[View HTML Report](./src/test/reports/)" >> $GITHUB_STEP_SUMMARY
-        else
-          echo "No test report found." >> $GITHUB_STEP_SUMMARY
-        fi
+        echo "### 🧪 Test Results Summary" >> $GITHUB_STEP_SUMMARY
+        total=$(grep -o 'Tests run: [0-9]*' target/surefire-reports/*.txt | awk '{s+=$3} END {print s}')
+        ✅Passed=$(grep -o 'Tests run: [0-9]*, Failures: 0' target/surefire-reports/*.txt | awk '{s+=$3} END {print s}')
+        ❌failed=$(grep -o 'Failures: [0-9]*' target/surefire-reports/*.txt | awk '{s+=$2} END {print s}')
+        ⏭️Skip=$(grep -o 'Tests run: [0-9]*, Skipped: [0-9]*' target/surefire-reports/*.txt | awk '{s+=$5} END {print s}')
+        echo "- Total Tests: $total" >> $GITHUB_STEP_SUMMARY
+        echo "- Failures: $failed" >> $GITHUB_STEP_SUMMARY
