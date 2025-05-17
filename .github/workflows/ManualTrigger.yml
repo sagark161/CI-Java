@@ -38,7 +38,6 @@ jobs:
       run: |
         echo "### 🧪 Test Results Summary" >> $GITHUB_STEP_SUMMARY
         total=$(grep -o 'Tests run: [0-9]*' target/surefire-reports/*.txt | awk '{s+=$3} END {print s}')
-        ✅Passed=$(grep -o 'Tests run: [0-9]*, Failures: 0' target/surefire-reports/*.txt | awk '{s+=$3} END {print s}')
         ❌failed=$(grep -o 'Failures: [0-9]*' target/surefire-reports/*.txt | awk '{s+=$2} END {print s}')
         ⏭️Skip=$(grep -o 'Tests run: [0-9]*, Skipped: [0-9]*' target/surefire-reports/*.txt | awk '{s+=$5} END {print s}')
         echo "- Total Tests: $total" >> $GITHUB_STEP_SUMMARY
