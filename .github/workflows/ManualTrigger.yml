@@ -24,14 +24,22 @@ jobs:
         java-version: '22'
         distribution: 'temurin'
         cache: maven
-    - name: Build with Maven
-      run: mvn clean install
 
     - name: Run Tests
-      run: mvn test
+      run: mvn clean test
 
     - name: Upload reports artifact
       uses: actions/upload-artifact@v4
       with:
         name: test-reports
         path: src/test/reports
+
+    - name: Add test results to job summary
+      if: always()
+      run: |
+        if [ -f src/test/reports/TestReport_*.html ]; then
+          echo "### Test Report" >> $GITHUB_STEP_SUMMARY
+          echo "[View HTML Report](./src/test/reports/)" >> $GITHUB_STEP_SUMMARY
+        else
+          echo "No test report found." >> $GITHUB_STEP_SUMMARY
+        fi
