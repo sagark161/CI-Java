@@ -29,12 +29,14 @@ jobs:
       run: mvn clean test
 
     - name: Upload reports artifact
+      if: always()
       uses: actions/upload-artifact@v4
       with:
         name: test-reports
         path: src/test/reports
 
-    - name: Parse test results and add to summary
+    - name: Add summary
+      if: always()
       run: |
         echo "### 🧪 Test Results Summary" >> $GITHUB_STEP_SUMMARY
         total=$(grep -ho 'Tests run: [0-9]*' target/surefire-reports/*.txt | awk '{s+=$3} END {print s}')
