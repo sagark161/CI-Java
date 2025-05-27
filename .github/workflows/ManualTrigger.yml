@@ -67,7 +67,7 @@ jobs:
         from: "CI/CD Automation <${{ secrets.MAIL_USERNAME }}>" # Optional: customize sender name
 
         # Email body (can be plain text, HTML, or Markdown)
-        html_body: file://src/test/reports/TestReport_.html # Path to your HTML report
+        html_body: file://target/surefire-reports/emailable-report.html # Path to your HTML report
         # Or for a simple text body:
         # body: |
         #   CI/CD workflow run for ${{ github.repository }} on branch ${{ github.ref_name }}.
