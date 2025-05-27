@@ -17,7 +17,7 @@ public class ExtentManager {
 
         // Load paths.properties using FileReaderUtility
         String reportLocation = config.getProperty("report.location", "src/test/reports/");
-        String reportFileName = "TestReport_" + System.currentTimeMillis() + ".html";
+        String reportFileName = "TestReport_" + ".html";//+ System.currentTimeMillis() + ".html";
         String reportFilePath = reportLocation + reportFileName;
 
         // Initialize ExtentSparkReporter
