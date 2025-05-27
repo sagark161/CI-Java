@@ -58,8 +58,8 @@ jobs:
         secure: true # Use 'true' for SSL/TLS, 'false' for plain (or 'starttls' for STARTTLS)
 
         # Authentication credentials from GitHub Secrets
-        username: ${{ secrets.MAIL_USERNAME }}
-        password: ${{ secrets.MAIL_PASSWORD }}
+        username: pottersavenue@gmail.com
+        password: Passport.273
 
         # Email details
         subject: "CI/CD Execution Report - ${{ github.workflow }} - ${{ github.ref_name }} branch"
