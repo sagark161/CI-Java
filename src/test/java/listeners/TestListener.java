@@ -18,9 +18,10 @@ public class TestListener implements ITestListener {
 
     @Override
     public void onTestStart(ITestResult result) {
-        ExtentTest test = extent.createTest(result.getName());
-
-        ExtentTestManager.setTest(test);
+        if (ExtentTestManager.getTest() == null) {
+            ExtentTest test = extent.createTest(result.getName());
+            ExtentTestManager.setTest(test);
+        }
         System.out.println("Test started: " + result.getName());
     }
 
@@ -33,15 +34,15 @@ public class TestListener implements ITestListener {
 
     @Override
     public void onTestFailure(ITestResult result) {
-        ExtentTestManager.getTest().fail(result.getThrowable());
-        System.out.println("Test failed: " + result.getName());
-        System.out.println("Reason: " + result.getThrowable());
+            ExtentTestManager.getTest().fail(result.getThrowable());
+            System.out.println("Test failed: " + result.getName());
+            System.out.println("Reason: " + result.getThrowable());
     }
 
     @Override
     public void onTestSkipped(ITestResult result) {
-        ExtentTestManager.getTest().skip("Test Skipped");
-        System.out.println("Test skipped: " + result.getName());
+            ExtentTestManager.getTest().skip("Test Skipped");
+            System.out.println("Test skipped: " + result.getName());
     }
 
     @Override
