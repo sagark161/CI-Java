@@ -47,3 +47,33 @@ jobs:
         echo "- Passed: $passed" >> $GITHUB_STEP_SUMMARY
         echo "- Failures: $failed" >> $GITHUB_STEP_SUMMARY
         echo "- Skipped: $skipped" >> $GITHUB_STEP_SUMMARY
+        
+    - name: Send email with execution report
+      uses: dawidd6/action-send-mail@v5
+      if: always() # This ensures the email is sent even if previous steps fail
+      with:
+        # SMTP connection details
+        server_address: smtp.gmail.com # Or your SMTP server
+        server_port: 465 # Or your SMTP port (e.g., 587 for TLS/STARTTLS)
+        secure: true # Use 'true' for SSL/TLS, 'false' for plain (or 'starttls' for STARTTLS)
+
+        # Authentication credentials from GitHub Secrets
+        username: ${{ secrets.MAIL_USERNAME }}
+        password: ${{ secrets.MAIL_PASSWORD }}
+
+        # Email details
+        subject: "CI/CD Execution Report - ${{ github.workflow }} - ${{ github.ref_name }} branch"
+        to: "sagar.k161@gmail.com" # Comma-separated list of recipients
+        from: "CI/CD Automation <${{ secrets.MAIL_USERNAME }}>" # Optional: customize sender name
+
+        # Email body (can be plain text, HTML, or Markdown)
+        html_body: file://src/test/reports/TestReport_.html # Path to your HTML report
+        # Or for a simple text body:
+        # body: |
+        #   CI/CD workflow run for ${{ github.repository }} on branch ${{ github.ref_name }}.
+        #   Status: ${{ job.status }}
+        #   See attached report for details.
+        #   Workflow URL: https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}
+
+        # Attachments
+        attachments: src/test/reports/TestReport_.html
